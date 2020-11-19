@@ -11,10 +11,10 @@ namespace MashingService
             var outputBuilder = new StringBuilder(input.Length);
 
             foreach (KeyValuePair<char, int> entry in freqMap) {
-                if (entry.Value > 1) {
+                if (entry.Value > 2) {
                     outputBuilder.AppendFormat("{0}{1}", entry.Key, entry.Value);
                 } else {
-                    outputBuilder.Append(entry.Key);
+                    outputBuilder.Append(entry.Key, entry.Value);
                 }
             }
 
