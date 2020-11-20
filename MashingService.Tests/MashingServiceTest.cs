@@ -55,5 +55,13 @@ namespace MashingService.Tests
 
             Assert.Equal("a3bbc3\\13\\2\\2\\34", mashed);
         }
+
+        [Fact]
+        public void Mash_ShouldReturnOriginalString_WhenCompactedOneIsEqualOrLonger() {
+            var originalString = "abc0123456789";
+            var mashed = subject.Mash(originalString);
+
+            Assert.Equal(originalString, mashed);
+        }
     }
 }

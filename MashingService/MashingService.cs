@@ -14,7 +14,9 @@ namespace MashingService
             }
 
             var symbolRanges = CountConsecutiveOccurrences(input);
-            var outputBuilder = new StringBuilder(input.Length);
+            var inputLength = input.Length;
+            var outputBuilder = new StringBuilder(inputLength);
+            var symbolsAppended = 0;
 
             foreach ((char Symbol, int Count) entry in symbolRanges) {
                 var shouldEscapeSymbol = IsDigit(entry.Symbol);
@@ -24,15 +26,23 @@ namespace MashingService
                         shouldEscapeSymbol ? "\\" : String.Empty,
                         entry.Symbol,
                         entry.Count);
+                    symbolsAppended += shouldEscapeSymbol ? 3 : 2;
                 } else {
                     if (shouldEscapeSymbol) {
                         for (var i = 0; i < entry.Count; i++) {
                             outputBuilder.AppendFormat("\\{0}", entry.Symbol);
                         }
+
+                        symbolsAppended += 2 * entry.Count;
                     } else {
                         outputBuilder.Append(entry.Symbol, entry.Count);
+                        symbolsAppended += entry.Count;
                     }
                 }
+
+                if (symbolsAppended >= inputLength) {
+                    return input; // at this point we're sure we're not going to actually compact anything
+                } 
             }
 
             return outputBuilder.ToString();
@@ -56,7 +66,7 @@ namespace MashingService
         }
 
         private bool IsDigit(char symbol) {
-            return symbol > '0' && symbol < '9';
+            return symbol >= '0' && symbol <= '9';
         }
     }
 }
