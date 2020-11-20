@@ -6,23 +6,47 @@ namespace MashingService.Tests
 {
     public class MashingServiceTest
     {
+        private readonly MashingService subject;
+
+        public MashingServiceTest() {
+            subject = new MashingService();
+        }
+
         [Fact]
         public void Mash_ShouldCompactString_WhenDoingSoShortensIt()
         {
-            var masher = new MashingService();
-
-            var mashed = masher.Mash("uuueeeenzzzzz");
+            var mashed = subject.Mash("uuueeeenzzzzz");
 
             Assert.Equal("u3e4nz5", mashed);
         }
 
         [Fact]
         public void Mash_ShouldNotCompactSymbols_ThatOnlyOccurTwice() {
-            var masher = new MashingService();
-
-            var mashed = masher.Mash("uuueeeennzzzzz");
+            var mashed = subject.Mash("uuueeeennzzzzz");
 
             Assert.Equal("u3e4nnz5", mashed);
+        }
+
+        [Fact]
+        public void Mash_ShouldReturnEmptyString_WhenGivenEmptyString() {
+            var mashed = subject.Mash("");
+
+            Assert.Equal(String.Empty, mashed);
+        }
+
+        [Fact]
+        public void Mash_ShouldReturnEmptyString_WhenGivenNull() {
+            var mashed = subject.Mash(null);
+
+            Assert.Equal(String.Empty, mashed);
+        }
+
+        [Fact]
+
+        public void Mash_ShouldCorrectlyAccountForSeparateCharacterGroups_WhenTheyArePresent() {
+            var mashed = subject.Mash("uuuueeeeuuuunnnn");
+
+            Assert.Equal("u4e4u4n4", mashed);
         }
     }
 }

@@ -4,35 +4,44 @@ using System.Collections.Generic;
 
 namespace MashingService
 {
+
+
     public class MashingService
     {
         public string Mash(string input) {
-            var freqMap = BuildFreqMap(input);
+            if (String.IsNullOrEmpty(input)) {
+                return String.Empty;
+            }
+
+            var symbolRanges = CountConsecutiveOccurrences(input);
             var outputBuilder = new StringBuilder(input.Length);
 
-            foreach (KeyValuePair<char, int> entry in freqMap) {
-                if (entry.Value > 2) {
-                    outputBuilder.AppendFormat("{0}{1}", entry.Key, entry.Value);
+            foreach ((char Symbol, int Count) entry in symbolRanges) {
+                if (entry.Count > 2) {
+                    outputBuilder.AppendFormat("{0}{1}", entry.Symbol, entry.Count);
                 } else {
-                    outputBuilder.Append(entry.Key, entry.Value);
+                    outputBuilder.Append(entry.Symbol, entry.Count);
                 }
             }
 
             return outputBuilder.ToString();
         }
 
-        private Dictionary<char, int> BuildFreqMap(string input) {
-            var dictionary = new Dictionary<char, int>();
-            foreach (var symbol in input)
-            {
-                if (!dictionary.ContainsKey(symbol)) {
-                    dictionary.Add(symbol, 0);
+        private List<(char Symbol, int Count)> CountConsecutiveOccurrences(string input) {
+            var list = new List<(char Symbol, int Count)>();
+            (char Symbol, int Count) currentEntry = (input[0], 0);
+            foreach (var symbol in input) {
+                if (symbol != currentEntry.Symbol) {
+                    list.Add(currentEntry);
+                    currentEntry = (symbol, 0);
                 }
 
-                dictionary[symbol]++;
+                currentEntry.Count++;
             }
 
-            return dictionary;
+            list.Add(currentEntry);
+
+            return list;
         }
     }
 }
