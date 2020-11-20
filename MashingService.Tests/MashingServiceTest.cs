@@ -57,11 +57,12 @@ namespace MashingService.Tests
         }
 
         [Fact]
-        public void Mash_ShouldReturnOriginalString_WhenCompactedOneIsEqualOrLonger() {
+        public void Mash_ShouldReturnOriginalString_WhenCompactedOneHasEqualOrGreaterLength() {
             var originalString = "abc0123456789";
             var mashed = subject.Mash(originalString);
 
             Assert.Equal(originalString, mashed);
+            Assert.True(String.ReferenceEquals(originalString, mashed));
         }
     }
 }
