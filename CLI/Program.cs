@@ -1,5 +1,4 @@
 ﻿using System;
-using MashingService;
 
 namespace CLI
 {
@@ -7,8 +6,8 @@ namespace CLI
     {
         static void Main(string[] args)
         {
-            var masher = new MashingService();
-            return masher.Mash(args[0] ?? "");
+            var masher = new MashingService.MashingService();
+            Console.WriteLine(masher.Mash(args[0] ?? ""));
         }
     }
 }
