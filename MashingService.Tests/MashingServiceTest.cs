@@ -48,5 +48,12 @@ namespace MashingService.Tests
 
             Assert.Equal("u4e4u4n4", mashed);
         }
+
+        [Fact]
+        public void Mash_ShouldCompactDigitsEscapingThem_WhenInputStringContainsDigits() {
+            var mashed = subject.Mash("aaabbccc111223333");
+
+            Assert.Equal("a3bbc3\\13\\2\\2\\34", mashed);
+        }
     }
 }

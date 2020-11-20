@@ -17,10 +17,21 @@ namespace MashingService
             var outputBuilder = new StringBuilder(input.Length);
 
             foreach ((char Symbol, int Count) entry in symbolRanges) {
+                var shouldEscapeSymbol = IsDigit(entry.Symbol);
                 if (entry.Count > 2) {
-                    outputBuilder.AppendFormat("{0}{1}", entry.Symbol, entry.Count);
+                    outputBuilder.AppendFormat(
+                        "{0}{1}{2}",
+                        shouldEscapeSymbol ? "\\" : String.Empty,
+                        entry.Symbol,
+                        entry.Count);
                 } else {
-                    outputBuilder.Append(entry.Symbol, entry.Count);
+                    if (shouldEscapeSymbol) {
+                        for (var i = 0; i < entry.Count; i++) {
+                            outputBuilder.AppendFormat("\\{0}", entry.Symbol);
+                        }
+                    } else {
+                        outputBuilder.Append(entry.Symbol, entry.Count);
+                    }
                 }
             }
 
@@ -42,6 +53,10 @@ namespace MashingService
             list.Add(currentEntry);
 
             return list;
+        }
+
+        private bool IsDigit(char symbol) {
+            return symbol > '0' && symbol < '9';
         }
     }
 }
